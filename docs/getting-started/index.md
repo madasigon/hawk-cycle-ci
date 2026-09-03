@@ -128,7 +128,7 @@ config:
                                        # domain names — do not leave it as the default "myorg"
 ```
 
-That's enough to get started. The environment name defaults to your stack name. Hawk will create a Cognito user pool for authentication automatically.
+That's enough to get started. The environment name defaults to your stack name. Hawk will create a Cognito user pool for authentication automatically. This minimal config does not deploy the relay behind `hawk attach` / `hawk acp`; to get it, add `hawk:valkeyEnabled: "true"` (or point `hawk:valkeyUrl` at an existing Valkey), see [Configuration Reference: Infrastructure Options](configuration.md#infrastructure-options).
 
 `hawk:domain` must equal or be a subdomain of `hawk:publicDomain` — service certificates validate in the `publicDomain` Route 53 zone, and preflight rejects mismatched pairs. See [Configuration Reference: Domain & DNS](configuration.md#domain-dns) for the full rule, the four DNS-strategy options, and the single-subdomain (Cloudflare) pairing.
 
@@ -263,7 +263,7 @@ To delete a deployment, use the teardown script:
 scripts/dev/teardown.sh <stack>
 ```
 
-It disables the deletion guards (`hawk:protectResources=false` + `pulumi up`), drains Karpenter nodes with a bounded wait, runs `pulumi destroy`, removes the stack, and prints the remaining manual cleanup for bootstrap resources (state bucket, KMS key, Route 53 zone, DNS delegation).
+It disables the deletion guards (`hawk:protectResources=false` + `pulumi up`), drains Karpenter nodes with a bounded wait, runs `pulumi destroy` (retrying through the helm-uninstall timeouts a fresh stack commonly hits), removes the stack, and prints the remaining manual cleanup for bootstrap resources (state bucket, KMS key, Route 53 zone, DNS delegation). It asks you to type the stack name first; pass `--yes` to skip that prompt in unattended runs.
 
 If you deployed a short-lived trial with `hawk:protectResources: "false"` from the start, a plain `pulumi destroy --yes && pulumi stack rm` usually works — the script mainly automates removing the (default-on) deletion guards and the Karpenter node-drain edge cases. For the manual sequence and troubleshooting (stuck NodeClaims, ALB deletion protection, non-empty buckets), see [Managing Your Deployment: Tearing Down](../infrastructure/managing.md#tearing-down).
 
