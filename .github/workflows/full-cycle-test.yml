@@ -34,6 +34,10 @@ on:
         description: Skip the authenticated smoke test (up + health + teardown only)
         type: boolean
         default: false
+      dry-run:
+        description: Plumbing check only (OIDC, vars, config generation; no AWS resources)
+        type: boolean
+        default: false
   # No schedule yet: cadence and the sandbox account are still undecided.
   # When they are, uncomment this block and restore a
   # `vars.FULL_CYCLE_TEST_ENABLED == 'true'` gate on the job so the cron
@@ -66,6 +70,7 @@ jobs:
       # Dispatch inputs reach the script via env, never spliced into `run:`.
       STACK: ${{ inputs.stack || 'full-cycle' }}
       SKIP_SMOKE: ${{ inputs.skip-smoke || 'false' }}
+      DRY_RUN: ${{ inputs.dry-run || 'false' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -129,6 +134,7 @@ jobs:
           [[ "$STACK" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "bad stack name: $STACK" >&2; exit 2; }
           args=(--bootstrap --generate-config)
           [ "$SKIP_SMOKE" = "true" ] && args+=(--skip-smoke)
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
           uv run scripts/dev/full-cycle-test "$STACK" "${args[@]}"
 
       - name: Upload report and logs
