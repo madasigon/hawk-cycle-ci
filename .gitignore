@@ -474,5 +474,7 @@ canary-flags.json.*.bak
 # Output of .claude/skills/design-review, posted by the Design review workflow
 .design-review/
 
-# scripts/dev/full-cycle-test reports and logs
+# scripts/dev/deploy-teardown-test.py reports and logs
+_deploy-test-logs/
+# legacy name of that directory, still used by local tooling
 _cycle-logs/
