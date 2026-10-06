@@ -1,8 +1,8 @@
 ARG REGISTRY=dhi.io/
 ARG DHI_PYTHON_VERSION=3.13
 
-FROM ghcr.io/astral-sh/uv:0.12.3@sha256:2d890623d310b57771ce840f0da5eed5fc6d657da05ffaa45d82797b53fa3abc AS uv
-FROM amazon/aws-cli:2.27.26@sha256:883c40732eac4a6fb15822f8023d6da591e188507d65e28af5471dfcf1d6b607 AS aws-cli
+FROM ghcr.io/astral-sh/uv:0.12.23@sha256:61d393e44e249f2e4b526b6c7ddcecce245946826e608e11c93ad4f5bba55b21 AS uv
+FROM amazon/aws-cli:2.37.5@sha256:fb7ccfc7b4e3a05017e6c9ded4ba959b99af622130e211fb976c68c2f4d3f224 AS aws-cli
 FROM ${REGISTRY}python:${DHI_PYTHON_VERSION}-dev AS python
 
 # aws-cli as a complete /usr/local tree. The directories COPY creates get a
