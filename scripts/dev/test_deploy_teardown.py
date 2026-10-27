@@ -4,8 +4,8 @@ Offline tests against the repo's real Pulumi.example.yaml; no AWS, no pulumi
 (the phases under test run with their AWS and subprocess helpers stubbed). The
 generation must fill the quickstart's minimal block plus `hawk:cpuArchitecture`
 and leave every other key at the example's default — in particular it must
-never set relayEnabled, which the quickstart tells a user to set and the
-harness reports on instead.
+never set relayEnabled, an opt-out the quickstart offers, so a run deploys the
+relay and its Valkey cache as they ship.
 """
 
 from __future__ import annotations
